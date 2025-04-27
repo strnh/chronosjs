@@ -1,0 +1,26 @@
+{
+  "name": "cron-monitor-app",
+  "version": "1.0.0",
+  "description": "メール監視とクロンジョブのアラートシステム",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "migrate": "node migrations/run.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "pg-promise": "^11.5.0",
+    "node-cron": "^3.0.2",
+    "mailparser": "^3.6.5",
+    "imap": "^0.8.19",
+    "winston": "^3.10.0",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
