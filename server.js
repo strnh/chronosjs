@@ -3,7 +3,9 @@
 require('dotenv').config();
 const app = require('./src/app');
 const logger = require('./src/utils/logger');
-const cronChecker = require('./src/services/cronChecker');
+const CronChecker = require('./src/services/cronChecker');
+const cronChecker = new CronChecker();
+
 
 const PORT = process.env.PORT || 3000;
 

@@ -10,6 +10,7 @@
     "mailparser": "^3.7.2",
     "node-cron": "^3.0.3",
     "routes": "^2.1.0",
+    "update": "^0.7.4",
     "winston": "^3.17.0"
   }
 }
