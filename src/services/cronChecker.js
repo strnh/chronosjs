@@ -1,5 +1,5 @@
 const nodeCron = require('node-cron');
-const parser = require('cron-parser'); // 追加
+const cronParser = require('cron-parser'); // 追加
 const CronJob = require('../models/cronJobs');
 const Alert = require('../models/alert');
 const mailParser = require('./mailParser');
@@ -77,7 +77,7 @@ class CronChecker {
   // 次回実行時間を計算
   _calculateNextRuntime(expression) {
     try {
-      const interval = parser.parseExpression(expression);
+      const interval = cronParser.parseExpression(expression);
       return interval.next().toDate();
     } catch (error) {
       logger.error(`次回実行時間の計算中にエラーが発生しました: ${expression}`, error);
