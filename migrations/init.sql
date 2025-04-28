@@ -1,23 +1,11 @@
 -- cron_jobsテーブル: 監視対象のクロンジョブ情報
-CREATE TABLE IF NOT EXISTS cron_jobs (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  description TEXT,
-  expected_schedule VARCHAR(100) NOT NULL, -- cron形式のスケジュール (例: "0 12 * * *")
-  expected_subject_pattern VARCHAR(255), -- 期待するメールの件名パターン
-  expected_content_pattern TEXT, -- 期待するメール内容のパターン
-  tolerance_minutes INTEGER DEFAULT 10, -- 許容遅延時間（分）
-  active BOOLEAN DEFAULT TRUE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
 
 -- job_executionsテーブル: クロンジョブの実行履歴
 CREATE TABLE IF NOT EXISTS job_executions (
   id SERIAL PRIMARY KEY,
   cron_job_id INTEGER REFERENCES cron_jobs(id) ON DELETE CASCADE,
   execution_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  status VARCHAR(20) CHECK (status IN ('success', 'failure', 'partial', 'missed')),
+  status VARCHAR(20) DEFAULT 'success' CHECK (status IN ('success', 'failure', 'partial', 'missed')),
   extracted_data JSONB, -- メールから抽出した有用なデータをJSON形式で保存
   execution_duration INTEGER, -- 実行時間（秒）
   message_id VARCHAR(255), -- メールのMessage-ID
@@ -45,12 +33,12 @@ CREATE TABLE IF NOT EXISTS notification_history (
   id SERIAL PRIMARY KEY,
   alert_id INTEGER REFERENCES alerts(id) ON DELETE CASCADE,
   notification_time TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  monitoring_system VARCHAR(50) NOT NULL, -- 'nagios', 'zabbix', 'prometheus'
+  monitoring_system VARCHAR(50) NOT NULL CHECK (monitoring_system IN ('nagios', 'zabbix', 'prometheus')), -- 'nagios', 'zabbix', 'prometheus'
   endpoint VARCHAR(255) NOT NULL,
   payload JSONB,
   response_code INTEGER,
   response_body TEXT,
-  status VARCHAR(20) CHECK (status IN ('success', 'failure')),
+  status VARCHAR(20) DEFAULT 'success' CHECK (status IN ('success', 'failure')),
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -60,8 +48,9 @@ CREATE TABLE IF NOT EXISTS mail_patterns (
   id SERIAL PRIMARY KEY,
   cron_job_id INTEGER REFERENCES cron_jobs(id) ON DELETE CASCADE,
   pattern_name VARCHAR(100) NOT NULL,
+  -- Allowed values for pattern_type: 'regex', 'keyword', 'json_path'
   pattern_type VARCHAR(20) CHECK (pattern_type IN ('regex', 'keyword', 'json_path')),
-  pattern_value TEXT NOT NULL,
+  target_field VARCHAR(50) CHECK (target_field IN ('subject', 'body', 'from', 'to', 'headers', 'cc', 'bcc')),
   target_field VARCHAR(50) CHECK (target_field IN ('subject', 'body', 'from', 'to', 'headers')),
   extraction_name VARCHAR(100), -- 抽出するデータの名前
   priority INTEGER DEFAULT 0, -- 複数パターンがある場合の優先順位
@@ -96,7 +85,11 @@ FOR EACH ROW EXECUTE FUNCTION update_timestamp();
 
 CREATE TRIGGER update_alerts_timestamp
 BEFORE UPDATE ON alerts
-FOR EACH ROW EXECUTE FUNCTION update_timestamp();
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+-- Ensure updated_at column is updated automatically
+-- Removed redundant ALTER COLUMN statement for updated_at in alerts table
 
 CREATE TRIGGER update_mail_patterns_timestamp
 BEFORE UPDATE ON mail_patterns
