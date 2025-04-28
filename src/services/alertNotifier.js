@@ -6,12 +6,12 @@ class AlertNotifier {
   constructor() {
     // メール送信設定
     this.transporter = nodemailer.createTransport({
-      host: config.mail.host,
-      port: config.mail.port,
-      secure: config.mail.secure, // true for 465, false for other ports
+      host: config.email.imap.host,
+      port: config.email.imap.port,
+      secure: config.email.imap.tls, // true for 465, false for other ports
       auth: {
-        user: config.mail.user,
-        pass: config.mail.password,
+        user: config.email.user,
+        pass: config.email.password,
       },
     });
   }
