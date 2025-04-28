@@ -1,5 +1,5 @@
 const emailFetcher = require('../utils/emailFetcher');
-const CronJob = require('../models/cronJob');
+const CronJob = require('../models/cronJobs');
 const logger = require('../utils/logger');
 
 class MailParser {

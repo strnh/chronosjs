@@ -35,9 +35,47 @@ project-root/
 ## install procedure
 
 1. deploy .env file
+
+example:
+
+```env
+PORT=3000
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_SECURE=false
+MAIL_USER=your-email@example.com
+MAIL_PASSWORD=your-email-password
+MAIL_FROM=your-email@example.com
+MAIL_RECIPIENTS=recipient1@example.com,recipient2@example.com
+```
+
 2. setup config/config.js
-3. preload databases
-4. migrate
-5. add scripts
-6. install dependency check
-7. run it
+
+example:
+
+```js
+require('dotenv').config();
+
+module.exports = {
+  mail: {
+    host: process.env.MAIL_HOST,
+    port: parseInt(process.env.MAIL_PORT, 10),
+    secure: process.env.MAIL_SECURE === 'true',
+    user: process.env.MAIL_USER,
+    password: process.env.MAIL_PASSWORD,
+    from: process.env.MAIL_FROM,
+    recipients: process.env.MAIL_RECIPIENTS.split(','),
+  },
+  server: {
+    port: process.env.PORT || 3000,
+  },
+};
+
+
+```
+
+1. preload databases
+1. migrate
+1. add scripts
+1. install dependency check
+1. run it

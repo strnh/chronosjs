@@ -1,7 +1,7 @@
 const { db } = require('../../config/database');
 const logger = require('../utils/logger');
 
-class CronJob {
+class cronJob {
   // 全てのアクティブなクロンジョブを取得
   static async getAllActive() {
     try {
@@ -241,3 +241,5 @@ class CronJob {
     }
   }
 }
+
+module.exports = cronJob;

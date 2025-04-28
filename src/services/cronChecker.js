@@ -1,5 +1,5 @@
 const nodeCron = require('node-cron');
-const CronJob = require('../models/cronJob');
+const CronJob = require('../models/cronJobs');
 const Alert = require('../models/alert');
 const mailParser = require('./mailParser');
 const alertNotifier = require('./alertNotifier');

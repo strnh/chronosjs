@@ -1,7 +1,15 @@
 {
+  "name": "chronosjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:strnh/chronosjs.git",
+  "author": "strnh <sotaro.hikosaka@outlook.com>",
+  "license": "MIT",
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "routes": "^2.1.0"
+    "imap": "^0.8.19",
+    "mailparser": "^3.7.2",
+    "node-cron": "^3.0.3",
+    "routes": "^2.1.0",
+    "winston": "^3.17.0"
   }
 }
