@@ -23,7 +23,7 @@ project-root/
 │   │   └── emailFetcher.js # メール取得ユーティリティ
 │   └── app.js            # Expressアプリケーション設定
 ├── migrations/
-│   └── initial.sql       # 初期DBマイグレーション
+│   └── init.sql       # 初期DBマイグレーション
 ├── plugins/
 │   ├── nagios.js         # Nagios通知プラグイン
 │   ├── zabbix.js         # Zabbix通知プラグイン
