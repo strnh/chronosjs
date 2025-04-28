@@ -6,7 +6,7 @@
   "author": "strnh <sotaro.hikosaka@outlook.com>",
   "license": "MIT",
   "dependencies": {
-    "imap": "^0.8.19",
+    "imap": "^0.8.17",
     "mailparser": "^3.7.2",
     "node-cron": "^3.0.3",
     "routes": "^2.1.0",
