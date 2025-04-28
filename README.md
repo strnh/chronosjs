@@ -31,3 +31,13 @@ project-root/
 ├── package.json
 └── server.js            # アプリケーションのエントリーポイント
 ```
+
+## install procedure
+
+1. deploy .env file
+2. setup config/config.js
+3. preload databases
+4. migrate
+5. add scripts
+6. install dependency check
+7. run it
