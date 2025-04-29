@@ -6,11 +6,15 @@
   "author": "strnh <sotaro.hikosaka@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "cron-parser": "^5.1.1",
     "imap": "^0.8.17",
     "mailparser": "^3.7.2",
     "node-cron": "^3.0.3",
     "routes": "^2.1.0",
     "update": "^0.7.4",
     "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "cron-schedule": "^5.0.4"
   }
 }

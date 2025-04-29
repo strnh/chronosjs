@@ -1,5 +1,4 @@
-const nodeCron = require('node-cron');
-const cronParser = require('cron-parser'); // 追加
+const CronSchedule = require('cron-schedule'); // cron-scheduleをインポート
 const CronJob = require('../models/cronJobs');
 const Alert = require('../models/alert');
 const mailParser = require('./mailParser');
@@ -41,13 +40,7 @@ class CronChecker {
   // 指定されたジョブのチェックをスケジュール
   scheduleJobCheck(job) {
     try {
-      // クロン形式の検証
-      if (!this._validateCronExpression(job.expected_schedule)) {
-        logger.error(`クロンジョブ「${job.name}」のスケジュール形式が無効です: ${job.expected_schedule}`);
-        return false;
-      }
-
-      // クロンの次回実行時間を計算
+      // クロン形式の検証と次回実行時間の計算
       const nextRuntime = this._calculateNextRuntime(job.expected_schedule);
       if (!nextRuntime) {
         logger.error(`クロンジョブ「${job.name}」の次回実行時間の計算に失敗しました`);
@@ -77,36 +70,37 @@ class CronChecker {
   // 次回実行時間を計算
   _calculateNextRuntime(expression) {
     try {
-      const interval = cronParser.parseExpression(expression);
-      return interval.next().toDate();
+      const schedule = CronSchedule.parseCronExpression(expression);
+      const nextDate = schedule.getNextDate(new Date());
+      return nextDate;
     } catch (error) {
       logger.error(`次回実行時間の計算中にエラーが発生しました: ${expression}`, error);
       return null;
     }
   }
 
-  // クロン式の検証
-  _validateCronExpression(expression) {
-    try {
-      return nodeCron.validate(expression);
-    } catch (error) {
-      logger.error(`クロン式の検証中にエラーが発生しました: ${expression}`, error);
-      return false;
-    }
-  }
-
   // スケジュールされたタスクを作成
   _createScheduledTask(job, checkTime) {
-    return nodeCron.schedule(checkTime, async () => {
+    const delay = checkTime.getTime() - Date.now();
+    return setTimeout(async () => {
       logger.info(`クロンジョブ「${job.name}」のスケジュールされたチェックを実行します`);
       await this.checkJob(job);
-    });
+    }, delay);
   }
+ // 定期的なチェックをスケジュール（例: 1時間ごと）
+  schedulePeriodicCheck() {
+    const interval = 60 * 60 * 1000; // 1時間（ミリ秒）
+    setInterval(async () => {
+      logger.info('全クロンジョブの定期チェックを実行します');
+      await this.checkAllJobs();
+    }, interval);
+  }
+
 
   // 全てのスケジュールされたタスクを停止
   stopAll() {
     for (const [id, task] of this.scheduledTasks) {
-      task.stop();
+      clearTimeout(task);
       this.scheduledTasks.delete(id);
     }
     logger.info('全てのスケジュールされたタスクを停止しました');
