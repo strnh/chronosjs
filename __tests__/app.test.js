@@ -1,3 +1,8 @@
-const { sum } = require('../app');
+const app = require('../src/app');
 
-// erase dummy line
+describe('App', () => {
+  test('should export express app', () => {
+    expect(app).toBeDefined();
+    expect(typeof app).toBe('function');
+  });
+});
