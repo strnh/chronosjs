@@ -18,9 +18,9 @@
     "dotenv": "^16.3.1",
     "express": "^4.22.2",
     "imap": "^0.8.19",
-    "mailparser": "^3.9.8",
+    "mailparser": "^3.9.11",
     "node-cron": "^4.2.1",
-    "nodemailer": "^8.0.5",
+    "nodemailer": "^9.0.1",
     "pg-promise": "^11.5.0",
     "routes": "^2.1.0",
     "winston": "^3.17.0"
